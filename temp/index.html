@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PDTLTCG619"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PDTLTCG619');
+</script>
+  <title>Owenisas Home</title>
+  <link rel="icon" href="icons/my_icon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    .hero {
+      position: relative;
+      height: 500px;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    #bg-video {
+      position: absolute;
+      width: 100%;
+      height: auto;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrapper">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrapper">
+    <section class="hero">
+      <video id="bg-video" autoplay muted loop>
+        <source src="resourses/Sequence 01_1.mp4" type="video/mp4">
+      </video>
+      <div class="hero-text">
+        <img class="main-logo" src="owenisas Main Logo.png" alt="Owenisas Logo">
+        <h1>Owenisas's Personal Blog</h1>
+        <p>Welcome to my personal space on the web!</p>
+        <a href="songlist.html" class="button">My Song List</a>
+      </div>
+    </section>
+
+    <section class="blog-posts">
+      <article>
+        <h2>Blog Post Title</h2>
+        <p>Post date: March 25, 2023</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio...</p>
+        <a href="#">Read more</a>
+      </article>
+      <!-- Add more blog post articles as needed -->
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrapper">
+    <p>&copy; 2023</p>
+    <img class="logo" src="owenisas Main Logo.png" alt="Owenisas Logo">
+    <p>All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

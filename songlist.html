@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Owenisas Home</title>
+  <link rel="icon" href="icons/my_icon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Song List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrapper">
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrapper">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>My Song List</h1>
+      </div>
+    </section>
+
+    <section class="song-list">
+      <ul>
+        <li class="song-item">
+          <img src="owenisas/my_song_list/Tensura Season 2 Part 2 OP Full【AMV】_『Like Flames』by MindaRyn [FHD].jpg" alt="Avatar 1" class="song-avatar">
+          <div class="song-info">
+            <span>Song Title 1</span>
+            <audio controls>
+              <source src="owenisas/my_song_list/Tensura Season 2 Part 2 OP Full【AMV】_『Like Flames』by MindaRyn [FHD].mp3" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </li>
+      </ul>
+      <button class="add-song-button">+ Add Song</button>
+    </section>
+    <div class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Song</h2>
+        <form>
+          <label for="song-title">Song Title</label>
+          <input type="text" id="song-title" name="song-title" required>
+
+          <label for="song-url">Song URL</label>
+          <input type="text" id="song-url" name="song-url" required>
+
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrapper">
+    <p>&copy; 2023</p>
+    <img class="logo" src="owenisas Main Logo.png" alt="Owenisas Logo">
+    <p>All rights reserved.</p>
+  </div>
+</footer>
+</body>
+<!-- Add this code just before the closing </body> tag in your songlist.html file -->
+<script>
+  const addSongButton = document.querySelector(".add-song-button");
+  const modal = document.querySelector(".modal");
+  const closeButton = document.querySelector(".close");
+  const songList = document.querySelector(".song-list ul");
+  const form = document.querySelector("form");
+
+  addSongButton.addEventListener("click", function() {
+    modal.style.display = "block";
+  });
+
+  closeButton.addEventListener("click", function() {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function(event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const songTitleInput = document.querySelector("#song-title");
+    const songUrlInput = document.querySelector("#song-url");
+    const songTitle = songTitleInput.value.trim();
+    const songUrl = songUrlInput.value.trim();
+    if (songTitle !== "" && songUrl !== "") {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/addsong");
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          console.log(xhr.responseText);
+          getSongList();
+          modal.style.display = "none";
+          form.reset();
+        }
+      };
+      xhr.send(`songTitle=${encodeURIComponent(songTitle)}&songUrl=${encodeURIComponent(songUrl)}`);
+    }
+  });
+
+  function getSongList() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "/getsongs");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        const songListData = JSON.parse(xhr.responseText);
+        songList.innerHTML = "";
+        for (let i = 0; i < songListData.length; i++) {
+          const song = songListData[i];
+          const li = document.createElement("li");
+          const div = document.createElement("div");
+          const audio = document.createElement("audio");
+          const source = document.createElement("source");
+          const title = document.createElement("h3");
+          const removeButton = document.createElement("button");
+          const progressBar = document.createElement("progress");
+          li.dataset.songId = song.id;
+          div.classList.add("song-item");
+          title.textContent = song.title;
+          audio.controls = true;
+          source.src = song.url;
+          audio.appendChild(source);
+          removeButton.classList.add("remove-song-button");
+          removeButton.textContent = "Remove";
+          progressBar.value = 0;
+          progressBar.max = 100;
+          div.appendChild(audio);
+          div.appendChild(title);
+          div.appendChild(removeButton);
+          div.appendChild(progressBar);
+          li.appendChild(div);
+          songList.appendChild(li);
+        }
+      }
+    };
+    xhr.send();
+  }
+
+  getSongList();
+
+  songList.addEventListener("click", function(event) {
+    if (event.target.classList.contains("remove-song-button")) {
+      const songItem = event.target.closest(".song-item");
+      const songId = songItem.dataset.songId;
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/removesong");
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          console.log(xhr.responseText);
+          songItem.remove();
+        }
+      };
+      xhr.send(`songId=${encodeURIComponent(songId)}`);
+    }
+  });
+</script>
+</html>
